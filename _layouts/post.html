@@ -10,7 +10,7 @@ layout: default
                             <p class="caption">{{ page.description }}</p>
                         </div>
                         <ul class="post-info">
-                            <li>{{ page.date | date_to_long_string }}</li>
+                            <li>{% if site.active_lang == "ar" %}{{ page.date | arabic_date }}{% else %}{{ page.date | date_to_long_string }}{% endif %}</li>
                             <li id="category"><a href="/news/categories/{{ page.categories | first | downcase }}">{{ page.categories | first }}</a></li>
                             {% assign total_count = content | strip_html | number_of_words %}
                             {% assign approx_read_time = total_count | divided_by: 250 %}
@@ -20,13 +20,13 @@ layout: default
                             <li><span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" title="This is an approximate figure calculated using the <code>strip_html</code> and <code>number_of_words</code> Liquid filters, and an average adult reading time of 250 words per minute.">{{ approx_read_time }} minute read</span></li>
                         </ul>
                     </div>
-                    <div class="post-img" style="background-image: url('/{% if page.metaImage %}{{ page.metaImage }}{% else %}assets/img/news/{{ page.date | date: "%Y-%m-%d" }}-{{ page.slug }}/meta.{% if page.metaImageExt %}{{ page.metaImageExt }}{% else %}jpg{% endif %}');{% if page.metaImagePosition %} background-position: {{ page.metaImagePosition }};{% else %} background-position: center;{% endif %}{% endif %}"></div>
+                    <div class="post-img" style="background-image: url('{% if page.metaImage %}{{ page.metaImage }}{% else %}/assets/img/news/{{ page.date | date: "%Y-%m-%d" }}-{{ page.slug }}/meta.{% if page.metaImageExt %}{{ page.metaImageExt }}{% else %}jpg{% endif %}{% endif %}');{% if page.metaImagePosition %} background-position: {{ page.metaImagePosition }};{% else %} background-position: center;{% endif %}{% if page.metaImageSize %} background-size: {{ page.metaImageSize }};{% else %} background-size: cover;{% endif %} background-repeat: no-repeat;"></div>
                 </div>
             </div>
         </section>
         <section>
             <div class="post-content-top">    
-                <p class="section-subtitle">by {% include post-author.html %}</p>
+                <p class="section-subtitle">{{ site.data[site.active_lang].news.by }} {% include post-author.html %}</p>
                 <!-- AddToAny BEGIN -->
                 <div class="post-share a2a_kit a2a_kit_size_32 a2a_default_style">
                     <a class="a2a_dd" href="https://www.addtoany.com/share"></a>

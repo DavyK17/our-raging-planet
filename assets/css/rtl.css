@@ -1,0 +1,29 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+li,
+.news-posts,
+.news-card-title,
+.news-card-cat-date,
+.post-info {
+    text-align: right !important;
+}
+
+input {
+    direction: rtl !important;
+}
+
+.carousel-control-next {
+    right: unset !important;
+    left: 0 !important;
+}
+
+.carousel-item {
+    margin-inline-start: unset !important;
+    margin-left: unset !important;
+}

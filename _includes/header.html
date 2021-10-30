@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="{% if site.active_lang == "en" %}en-GB{% elsif site.active_lang == "ar" %}ar-SA" dir="rtl{% endif %}">
 
 <head>
     <title>{% include page-title.html %}</title>
@@ -8,23 +8,23 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="description" content="Our Raging Planet">{% if page.name == "404.html" %}
+    <meta name="description" content="{% if page.description[site.active_lang] %}{{ page.description[site.active_lang] }}{% else %}{{ page.description }}{% endif %}">{% if page.name == "404.html" %}
     <meta name="robots" content="noindex, nofollow" />{% endif %}
 
     <!-- SOCIAL / OpenGraph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ page.url | absolute_url }}">
     <meta property="og:title" content='{% include page-title.html %}'>{% if page.description %}
-    <meta property="og:description" content="{{ page.description }}">{% endif %}
-    <meta property="og:image" content="">
+    <meta property="og:description" content="{% if page.description[site.active_lang] %}{{ page.description[site.active_lang] }}{% else %}{{ page.description }}{% endif %}">{% endif %}
+    <meta property="og:image" content="{% include meta-image.html %}">
 
     <!-- SOCIAL / Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@OurRagingPlanet">
     <meta name="twitter:url" content="{{ page.url | absolute_url }}">
     <meta name="twitter:title" content='{% include page-title.html %}'>{% if page.description %}
-    <meta name="twitter:description" content="{{ page.description }}">{% endif %}
-    <meta name="twitter:image" content="/{% if page.layout == "post" %}assets/img/news/{{ page.date | date: "%Y-%m-%d" }}-{{ page.slug }}/meta.{% if page.metaImageExt %}{{ page.metaImageExt }}{% else %}jpg{% endif %}{% elsif page.metaImage %}{{ page.metaImage }}{% else %}assets/img/ourragingplanet.png{% endif %}">
+    <meta name="twitter:description" content="{% if page.description[site.active_lang] %}{{ page.description[site.active_lang] }}{% else %}{{ page.description }}{% endif %}">{% endif %}
+    <meta name="twitter:image" content="{% include meta-image.html %}">
 
     <!-- STYLESHEETS / Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,13 +34,18 @@
     <!-- STYLESHEETS / Local -->
     <link rel="stylesheet" type="text/css" href="/assets/css/reset.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/main.css" />{% if page.url contains "news/" %}
-    <link rel="stylesheet" type="text/css" href="/assets/css/news.css" />{% endif %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/news.css" />{% endif %}{% if site.active_lang == "ar" %}
+    <link rel="stylesheet" type="text/css" href="/assets/css/rtl.css" />{% endif %}
 
     <!-- STYLESHEETS / Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">{% if site.active_lang == "ar" %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css" integrity="sha384-gXt9imSW0VcJVHezoNQsP+TNrjYXoGcrqBZJpry9zJt8PCQjobwmhMGaDHTASo9N" crossorigin="anonymous">{% endif %}
+
+    <!-- JAVASCRIPT / Netlify CMS -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 
-<body{% if page.name == "index.html" and page.dir == "/" %} data-bs-spy="scroll" data-bs-target="#top-nav" data-bs-offset="0" tabindex="0"{% endif %}>
+<body{% if page.name == "index.html" and page.dir == "/" %} data-bs-spy="scroll" data-bs-target="#top-menu" data-bs-offset="0" tabindex="0"{% endif %}>
     <div id="top"></div>
     <header class="scroll-top">
         <nav class="navbar navbar-expand-lg">
@@ -52,26 +57,44 @@
                 <div class="collapse navbar-collapse" id="top-menu">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link top"{% if page.name == "index.html" and page.dir == "/" %} aria-current="page"{% endif %} href="{% if page.name != "index.html" or page.url contains "news/" %}/{% endif %}#top">Home</a>
+                            <a class="nav-link top"{% if page.name == "index.html" and page.dir == "/" %} aria-current="page"{% endif %} href="{% include index-section-link.html %}#top">{{ site.data[site.active_lang].pages.home }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% if page.name != "index.html" or page.url contains "news/" %}/{% endif %}#about">About</a>
+                            <a class="nav-link" href="{% include index-section-link.html %}#about">{{ site.data[site.active_lang].pages.about }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% if page.name != "index.html" or page.url contains "news/" %}/{% endif %}#features">Features</a>
+                            <a class="nav-link" href="{% include index-section-link.html %}#features">{{ site.data[site.active_lang].pages.features }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% if page.name != "index.html" or page.url contains "news/" %}/{% endif %}#resources">Resources</a>
+                            <a class="nav-link" href="{% include index-section-link.html %}#resources">{{ site.data[site.active_lang].pages.resources }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{% if page.name == "sandstorms.html" %} active" aria-current="page{% endif %}" href="/sandstorms">Sandstorms</a>
+                            <a class="nav-link{% if page.name contains "sandstorms" and page.name contains ".html" %} active" aria-current="page{% endif %}" href="/sandstorms">{{ site.data[site.active_lang].pages.sandstorms }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{% if page.name == "index.html" and page.url contains "news/" %} active" aria-current="page{% endif %}" href="/news">News</a>
+                            <a class="nav-link{% if page.name == "index.html" and page.url contains "news/" %} active" aria-current="page{% endif %}" href="/news">{{ site.data[site.active_lang].pages.news }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{% if page.name == "contact.html" %} active" aria-current="page{% endif %}" href="/contact">Contact</a>
+                            <a class="nav-link{% if page.name contains "contact" and page.name contains ".html" %} active" aria-current="page{% endif %}" href="/contact">{{ site.data[site.active_lang].pages.contact }}</a>
                         </li>
+                        <div class="dropdown">
+                            <li class="nav-item">
+                                <a class="nav-link dropdown-toggle" id="lang-selector" data-bs-toggle="dropdown" aria-expanded="false" href="#">{{ site.data[site.active_lang].pages.language }}</a>
+                                <ul class="dropdown-menu uppercase" aria-labelledby="lang-selector">
+                                    {% for lang in site.languages %}
+                                        {% if lang == site.active_lang %}
+                                    <li><a class="dropdown-item disabled" aria-current="true" aria-disabled="true" href="#">{{ site.data[site.active_lang].lang[site.active_lang] }}</a></li>
+                                        {% else %}
+                                            {% if lang == site.default_lang %}
+                                    <li><a class="dropdown-item{% if site.active_lang == site.default_lang %} disabled" aria-current="true" aria-disabled="true{% endif %}" href="{% if site.active_lang != site.default_lang %}{% if page.path contains "404" and page.path contains ".html" %}../{% else %} {{ page.url }}{% endif %}{% else %}#{% endif %}">{{ site.data[lang].lang[lang] }}</a></li>
+                                            {% else %}
+                                    <li><a class="dropdown-item{% if site.active_lang == lang %} disabled" aria-current="true" aria-disabled="true{% endif %}" href="{% if site.active_lang != lang %}/{{ lang }}{% if page.path contains "404" and page.path contains ".html" %}{% else %}{{ page.url }}{% endif %}{% else %}#{% endif %}">{{ site.data[lang].lang[lang] }}</a></li>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        </div>
                     </ul>
                 </div>
             </div>
